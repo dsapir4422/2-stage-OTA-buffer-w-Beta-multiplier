@@ -53,6 +53,7 @@ We will calculate $g_{m1}$ from Settling time ($T_{slew} + T_{sm,sig}$) equation
 We will target for $V_{dsat}$ of 0.15-0.2V for the current mirrors M3,M4,M5,M7 and $V_{dsat}$ of 0.05-0.1V for the gm transistors M1,M2,M6
 
 # Design & Simulations
+## Cc Miller compensation:
 Taken from Willy Sansen book - Analog Design Essensials - 
 
 <img src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/9eefba00-3ce6-4354-a655-f47b7b170388" align="middle" width="500" height="500"  alt="Image Alt Text" />
