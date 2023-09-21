@@ -21,7 +21,7 @@ We will use CMOS general pdk 90nm (gpdk90) technology by Cadence.
 
 # Hand calculations & Design assumptions
 2-stage Opamp will have 2 pole's which can cause a non-stable amplifier (PM < 45 [deg]), therefore we will use pole-splitting compensation by adding a Capacitor Cc between 1st and 2nd stage.
-The compensation capacitor value can be: $C_c \approx 0.25*C_L$, which will decrease the dominant pole and increase the non-dominant pole but will introduce a **RHP ZERO!!!** which acts as a pole and can reduce PM.
+The compensation capacitor value can be: $C_c \approx 0.25*C_L$, which will decrease the dominant pole (P1) and increase the non-dominant pole (P2) but will introduce a **RHP ZERO!!!** (Z) which acts as a pole and can reduce PM.
 
 There are 2 ways to compensate the Zero: 
 * move Zero to high frequencies -> high power design
@@ -30,13 +30,13 @@ We will show both techniques.
 
 **Pole Zero analysis**
 
-$GBW = \frac{g_{m1}}{Cc}$
+$GBW = g_{m1}/C_c$
 
-$P_1 = \frac{1}{(r_{o2}||r{o4})A_{v2}C_c}$
+$P_1 = BW = f_d = 1/[(r_{o2}||r_{o4})C_c]$
 
-$P_2 = \frac{g_{m6}}{C_L}$
+$P_2 = f_{nd} = g_{m6}/C_L$
 
-$Z =  \frac{g_{m6}}{C_c}$
+$Z =  g_{m6}/C_c$
 
 For the first compensation method: $Z > 10*GBW$
 
@@ -46,7 +46,7 @@ For the second compensation method: $Z \approx P_2$
 
 $SR = I_{tail}/C_c$
 
-Open loop Gain: $A_v = g_{m2}*r_{o2}||r_{o4}*g_{m6}*r_{o6}||r_{o5}$ (assuming M1=M2, M3=M4)
+Open loop Gain: $A_v = A_{v1}*A_{v2} =  g_{m2}*r_{o2}||r_{o4}*g_{m6}*r_{o6}||r_{o5}$ (assuming M1=M2, M3=M4)
 
 We will calculate $g_{m1}$ from Settling time ($T_{slew} + T_{sm,sig}$) equations (see attched excel)
 
