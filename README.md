@@ -19,7 +19,10 @@ We will use CMOS general pdk 90nm (gpdk90) technology by Cadence.
 * $V_{AA} = 2.5[V]$
 * $C_{L} = 20[pF]$
 
-The specifications will hold cross process corners - TT,SS,FF,FS,SF and Temperatures ranging (-40,125)
+The specifications will hold cross PVT corners: process - TT,SS,FF,FS,SF, Temperatures ranging (-40,125) and +/- 10% supply (2.4,2.5,2.6), total 54 corners -
+
+<img width="250" alt="image" src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/6b650ba0-0211-48cf-8e6a-2f956469dc7b">
+
 
 # Hand calculations & Design assumptions
 2-stage Opamp will have 2 pole's which can cause a non-stable amplifier (PM < 45 [deg]), therefore we will use pole-splitting compensation by adding a Capacitor Cc between 1st and 2nd stage.
@@ -70,10 +73,23 @@ Because ICMR- is very low, we are using a differential pair PMOS based as the fi
 Final design, where $C_c = 4[pF]$ - 
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/d39115f1-f178-4788-87af-ae4e370e25f4)
 
-Looking at STB simulation results and plotting Bode plot before (Red and Yellow) and after Cc Miller (Green and light Blue), we can see that the Cc miller CAP increased PM by splitting the poles - $f_d$ is decreased to $\approx 1k$ and $f_nd$ increased to $\approx 40[MHz]$ - 
+Looking at STB simulation results and plotting Bode plot before (Red and Yellow) and after Cc Miller (Green and light Blue), we can see that the Cc miller capacitor increased PM by splitting the poles - $f_d$ is decreased to $\approx 1[KHz]$ and $f_nd$ increased to $\approx 40[MHz]$ - 
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/67431c4a-852f-43b3-9f12-bd20c447b26a)
 
 PM increased from 27[deg] to 75[deg] ! 
 
-We can also see we have no RHP zero (probably moved to higher freqencies), it is because we kept $Z > 10GBW$ by keeping $gm_1 \approx 0.2mS > 10*gm_6 \approx 2mS$ by the penalty of burning more power in 2nd stage 
+We can also see we have no RHP zero (probably moved to higher freqencies), it is because we kept $Z > 10GBW$ by keeping $gm_1 \approx 0.2mS > 10*gm_6 \approx 2mS$ by the penalty of burning more power in 2nd stage.
+
+Simulating over corners - 
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/479e1110-a5ea-4e7d-bf71-bb850f10f568)
+
+We will replace the ideal current source with the Beta multiplier circuit - 
+
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/6cb5a597-aabf-40d9-a2ef-e814df845785")
+
+
+M0,M1,M2 assemble a start-up circuit, M14,M18-M20 + R1 are a self-biased Beta-multiplier which will provide the OTA a 20[uA] bias current.
+Let's re-simulate with Beta multiplier + 2-stage OTA + Cc Miller capacitor -
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/01e2e498-3386-4aba-bdb4-25cda932eb4e)
+Simulation results are still in spec, but STD increased as we replaced ideal components (current source) with Beta-multiplier
 
