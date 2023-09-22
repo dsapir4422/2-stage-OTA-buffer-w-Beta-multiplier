@@ -62,6 +62,9 @@ We will target for $V_{dsat}$ of 0.15-0.2V for the current mirrors M3,M4,M5,M7 a
 We will use a basic Beta-multiplier circuit with start-up circuit to assure circuit will wake-up.
 The circuit will produce a $20[uA]$ bias current, according to the following equation - $I_{out} = (2/U_nC_{ox}R_s^2)*(1-1/\sqrt(K))^2$
 
+**Rz PVT tracking**
+<add here>
+
 # Design & Simulations
 ## Cc Miller compensation:
 Taken from Willy Sansen book - Analog Design Essensials - 
@@ -95,12 +98,29 @@ Simulation results are still in spec, but STD increased as we replaced ideal com
 
 ## Cc+Rc PVT tracking compensation:
 We will now show the same design but with a different compensation technique - we will add a resistor in series with Cc, so now we can reduce 2nd stage current as we don't need $Z > 10GBW$. also, as long as we keep $R_z = 1/g_{m6}$ (2nd stage CS), meaning - Z is close to $f_{nd}$, the LHP Zero and Pole will cancel each other ! the disadvantage if we make a poor design is a Pole-Zero doublet which will cause ringing in output signal. 
-
 We will also implement Rc resistor with a PVT tracking circuit to be able to track the resistance over corners. 
+
 DC operation point simulation, $R_c = 5.6[KOhm]$ - 
+
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/0bd3a8d3-0a57-40cc-81a3-8e30299defa5)
 
+Looking at STB simulation results and plotting Bode plot before (Yellow) and after (Red), we can see PM increased from 35[deg] to 84[deg] !
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/72d89a24-8b8d-448f-b13a-b3ed4680be38)
-Looking at STB simulation results and plotting Bode plot before (Yellow) and after (Red)
+
+Replacing ideal component - current source with Beta multiplier circuit and Resistor with PVT tracking circuit
+Final design - 
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/e8614705-ea3c-4131-91ae-e8cd24f5e7e4)
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/77cda200-fc90-43fe-8eb4-e311a7a3c39c)
+
+Simulation results over corners - 
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/25bda51e-2f30-476a-a62c-169d919c8ede)
+
+Full circuit -
+
+<img width="629" alt="image" src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/62da1767-9ccb-4387-8d84-922ab4ff5d2e">
+
+
+## Beta-multiplier start-up circuit simulation:
+
 
 
