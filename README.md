@@ -70,7 +70,7 @@ Taken from Willy Sansen book - Analog Design Essensials -
 
 Because ICMR- is very low, we are using a differential pair PMOS based as the first stage, following by a NMOS Common Source as the 2nd stage.
 
-Final design, where $C_c = 4[pF]$ - 
+DC operation point simulation, where $C_c = 4[pF]$ - 
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/d39115f1-f178-4788-87af-ae4e370e25f4)
 
 Looking at STB simulation results and plotting Bode plot before (Red and Yellow) and after Cc Miller (Green and light Blue), we can see that the Cc miller capacitor increased PM by splitting the poles - $f_d$ is decreased to $\approx 1[KHz]$ and $f_nd$ increased to $\approx 40[MHz]$ - 
@@ -92,4 +92,15 @@ M0,M1,M2 assemble a start-up circuit, M14,M18-M20 + R1 are a self-biased Beta-mu
 Let's re-simulate with Beta multiplier + 2-stage OTA + Cc Miller capacitor -
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/01e2e498-3386-4aba-bdb4-25cda932eb4e)
 Simulation results are still in spec, but STD increased as we replaced ideal components (current source) with Beta-multiplier
+
+## Cc+Rc PVT tracking compensation:
+We will now show the same design but with a different compensation technique - we will add a resistor in series with Cc, so now we can reduce 2nd stage current as we don't need $Z > 10GBW$. also, as long as we keep $R_z = 1/g_{m6}$ (2nd stage CS), meaning - Z is close to $f_{nd}$, the LHP Zero and Pole will cancel each other ! the disadvantage if we make a poor design is a Pole-Zero doublet which will cause ringing in output signal. 
+
+We will also implement Rc resistor with a PVT tracking circuit to be able to track the resistance over corners. 
+DC operation point simulation, $R_c = 5.6[KOhm]$ - 
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/0bd3a8d3-0a57-40cc-81a3-8e30299defa5)
+
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/72d89a24-8b8d-448f-b13a-b3ed4680be38)
+Looking at STB simulation results and plotting Bode plot before (Yellow) and after (Red)
+
 
