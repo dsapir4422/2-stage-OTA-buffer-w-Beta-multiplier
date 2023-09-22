@@ -54,6 +54,11 @@ We will calculate $g_{m1}$ from Settling time ($T_{slew} + T_{sm,sig}$) equation
 
 We will target for $V_{dsat}$ of 0.15-0.2V for the current mirrors M3,M4,M5,M7 and $V_{dsat}$ of 0.05-0.1V for the gm transistors M1,M2,M6
 
+**Beta multiplier**
+
+We will use a basic Beta-multiplier circuit with start-up circuit to assure circuit will wake-up.
+The circuit will produce a $20[uA]$ bias current, according to the following equation - $I_{out} = (2/U_nC_{ox}R_s^2)*(1-1/\sqrt(K))^2$
+
 # Design & Simulations
 ## Cc Miller compensation:
 Taken from Willy Sansen book - Analog Design Essensials - 
