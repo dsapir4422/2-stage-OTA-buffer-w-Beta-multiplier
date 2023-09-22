@@ -19,6 +19,8 @@ We will use CMOS general pdk 90nm (gpdk90) technology by Cadence.
 * $V_{AA} = 2.5[V]$
 * $C_{L} = 20[pF]$
 
+The specifications will hold cross process corners - TT,SS,FF,FS,SF and Temperatures ranging (-40,125)
+
 # Hand calculations & Design assumptions
 2-stage Opamp will have 2 pole's which can cause a non-stable amplifier (PM < 45 [deg]), therefore we will use pole-splitting compensation by adding a Capacitor Cc between 1st and 2nd stage.
 The compensation capacitor value can be: $C_c \approx 0.25*C_L$, which will decrease the dominant pole (P1) and increase the non-dominant pole (P2) but will introduce a **RHP ZERO!!!** (Z) which acts as a pole and can reduce PM.
@@ -57,4 +59,16 @@ We will target for $V_{dsat}$ of 0.15-0.2V for the current mirrors M3,M4,M5,M7 a
 Taken from Willy Sansen book - Analog Design Essensials - 
 
 <img src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/9eefba00-3ce6-4354-a655-f47b7b170388" align="middle" width="500" height="500"  alt="Image Alt Text" />
+
+Because ICMR- is very low, we are using a differential pair PMOS based as the first stage, following by a NMOS Common Source as the 2nd stage.
+
+Final design, where $C_c = 4[pF]$ - 
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/d39115f1-f178-4788-87af-ae4e370e25f4)
+
+Looking at STB simulation results and plotting Bode plot before (Red and Yellow) and after Cc Miller (Green and light Blue), we can see that the Cc miller CAP increased PM by splitting the poles - $f_d$ is decreased to $\approx 1k$ and $f_nd$ increased to $\approx 40[MHz]$ - 
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/67431c4a-852f-43b3-9f12-bd20c447b26a)
+
+PM increased from 27[deg] to 75[deg] ! 
+
+We can also see we have no RHP zero (probably moved to higher freqencies), it is because we kept $Z > 10GBW$ by keeping $gm_1 \approx 0.2mS > 10*gm_6 \approx 2mS$ by the penalty of burning more power in 2nd stage 
 
