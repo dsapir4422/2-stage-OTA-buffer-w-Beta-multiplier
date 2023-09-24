@@ -29,8 +29,9 @@ The specifications will hold cross PVT corners: process - TT,SS,FF,FS,SF, Temper
 The compensation capacitor value can be: $C_c \approx 0.25*C_L$, which will decrease the dominant pole (P1) and increase the non-dominant pole (P2) but will introduce a **RHP ZERO!!!** (Z) which acts as a pole and can reduce PM.
 
 There are 2 ways to compensate the Zero: 
-* move Zero to high frequencies -> high power design
+* move Z to high frequencies -> high power design
 * move Z to LHP -> can introduce a Pole-Zero doublet (which will affect ringing)
+
 We will show both techniques.
 
 **Pole Zero analysis**
@@ -45,7 +46,7 @@ $Z =  g_{m6}/C_c$
 
 For the first compensation method: $Z > 10*GBW$
 
-For the second compensation method: $Z \approx P_2$
+For the second compensation method: $Z \approx 2.2P_2$
 
 **Parameters analysis**
 
@@ -63,7 +64,8 @@ We will use a basic Beta-multiplier circuit with start-up circuit to assure circ
 The circuit will produce a $20[uA]$ bias current, according to the following equation - $I_{out} = (2/U_nC_{ox}R_s^2)*(1-1/\sqrt(K))^2$
 
 **Rz PVT tracking**
-<add here>
+
+As mentioned earlier, adding a C_c capacitor introduce a Zero which we would like to cancel. If we keep the Zero close to P2 it will behave as LHP Zero and the pole and zero will cancel each other out. In order to do that we will design - $R_z = (1/g_{m6})*(C_L + C_c / C_c)$ (gm6 - 2nd stage CS). For good design over corners, we will design $R_z$ as a transistor in low triode region, and add a Vgs divider which will track voltage changes across corners (PVT tracking)
 
 # Design & Simulations
 ## Cc Miller compensation:
@@ -84,7 +86,8 @@ PM increased from 27[deg] to 75[deg] !
 We can also see we have no RHP zero (probably moved to higher freqencies), it is because we kept $Z > 10GBW$ by keeping $gm_1 \approx 0.2mS > 10*gm_6 \approx 2mS$ by the penalty of burning more power in 2nd stage.
 
 Simulating over corners - 
-![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/479e1110-a5ea-4e7d-bf71-bb850f10f568)
+
+<img width="600" alt="image" src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/479e1110-a5ea-4e7d-bf71-bb850f10f568">
 
 We will replace the ideal current source with the Beta multiplier circuit - 
 
@@ -93,11 +96,13 @@ We will replace the ideal current source with the Beta multiplier circuit -
 
 M0,M1,M2 assemble a start-up circuit, M14,M18-M20 + R1 are a self-biased Beta-multiplier which will provide the OTA a 20[uA] bias current.
 Let's re-simulate with Beta multiplier + 2-stage OTA + Cc Miller capacitor -
-![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/01e2e498-3386-4aba-bdb4-25cda932eb4e)
+
+<img width="500" alt="image" src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/01e2e498-3386-4aba-bdb4-25cda932eb4e">
+
 Simulation results are still in spec, but STD increased as we replaced ideal components (current source) with Beta-multiplier
 
 ## Cc+Rc PVT tracking compensation:
-We will now show the same design but with a different compensation technique - we will add a resistor in series with Cc, so now we can reduce 2nd stage current as we don't need $Z > 10GBW$. also, as long as we keep $R_z = 1/g_{m6}$ (2nd stage CS), meaning - Z is close to $f_{nd}$, the LHP Zero and Pole will cancel each other ! the disadvantage if we make a poor design is a Pole-Zero doublet which will cause ringing in output signal. 
+We will now show the same design but with a different compensation technique - we will add a resistor in series with Cc, so now we can reduce 2nd stage current as we don't need $Z > 10GBW$. also, as long as we keep Rz Zero close to $f_{nd}$, the LHP Zero and Pole will cancel each other ! the disadvantage if we make a poor design is a Pole-Zero doublet which will cause ringing in output signal. 
 We will also implement Rc resistor with a PVT tracking circuit to be able to track the resistance over corners. 
 
 DC operation point simulation, $R_c = 5.6[KOhm]$ - 
@@ -112,15 +117,13 @@ Final design -
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/e8614705-ea3c-4131-91ae-e8cd24f5e7e4)
 ![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/77cda200-fc90-43fe-8eb4-e311a7a3c39c)
 
-Simulation results over corners - 
-![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/25bda51e-2f30-476a-a62c-169d919c8ede)
+Simulation results over corners -
+
+<img width="500" alt="image" src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/25bda51e-2f30-476a-a62c-169d919c8ede">
+
 
 Full circuit -
-
-<img width="629" alt="image" src="https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/62da1767-9ccb-4387-8d84-922ab4ff5d2e">
-
-
-## Beta-multiplier start-up circuit simulation:
+![image](https://github.com/dsapir4422/2-stage-OTA-buffer-w-Beta-multiplier/assets/87266625/62da1767-9ccb-4387-8d84-922ab4ff5d2e)
 
 
 
